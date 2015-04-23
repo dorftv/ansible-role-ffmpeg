@@ -62,7 +62,7 @@
     - make {{ cpus }}
     - make install
     - make distclean
- - name: compile x264
+- name: compile x264
   command: "{{ item }}" 
   args:
     chdir: "{{ source_dir }}/x264" 
