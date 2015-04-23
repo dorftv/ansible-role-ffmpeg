@@ -1,0 +1,117 @@
+- apt: update_cache=yes cache_valid_time=3600
+
+- name: install dependencies
+  action: apt pkg={{ item }} state=present
+  with_items:
+    - git-core
+    - autoconf 
+    - automake 
+    - build-essential 
+    - libass-dev 
+    - libgpac-dev
+    - libtheora-dev 
+    - libtool 
+    - libvorbis-dev 
+    - pkg-config 
+    - texi2html 
+    - zlib1g-dev
+    - libmp3lame-dev
+
+# Git
+
+- name: clone latest yasm
+  git: repo=git://github.com/yasm/yasm.git 
+       dest={{ source_dir }}/yasm 
+       accept_hostkey=yes
+- name: clone latest fdk-aac
+  git: repo=git://github.com/mstorsjo/fdk-aac.git
+       dest={{ source_dir }}/fdk-aac
+       accept_hostkey=yes
+
+- name: clone latest x264
+  git: repo=git://git.videolan.org/x264.git
+       dest={{ source_dir }}/x264
+       accept_hostkey=yes
+       
+- name: clone latest libvpx
+  git: repo=https://chromium.googlesource.com/webm/libvpx.git
+         dest={{ source_dir }}/libvpx
+         accept_hostkey=yes
+
+- name: clone latest ffmpeg
+  git: repo=git://source.ffmpeg.org/ffmpeg.git
+       dest={{ source_dir }}/ffmpeg
+       accept_hostkey=yes
+
+- name: clone latest opus
+  git: repo=git://git.opus-codec.org/opus.git
+       dest={{ source_dir }}/opus
+       accept_hostkey=yes
+
+
+# Compiling
+
+- name: compile yasm 
+  command: "{{ item }}"
+  args:
+    chdir: "{{ source_dir }}/yasm" 
+    creates: "{{ bin_dir }}/yasm"
+  with_items:
+    - ./autogen.sh
+    - ./configure --bindir={{ bin_dir }}
+    - make {{ cpus }}
+    - make install
+    - make distclean
+ - name: compile x264
+  command: "{{ item }}" 
+  args:
+    chdir: "{{ source_dir }}/x264" 
+    creates: "{{ bin_dir }}/x264"
+  with_items:
+    - ./configure --bindir={{ bin_dir }} --enable-static
+    - make {{ cpus }}
+    - make install
+    - make distclean
+ - name: compile fdk-aac
+  command: "{{ item }}" 
+  args:
+    chdir: "{{ source_dir }}/fdk-aac" 
+    creates: "{{ lib_dir }}/libfdk-aac.a"
+  with_items:
+    - autoreconf -fiv
+    - ./configure --disable-shared
+    - make {{ cpus }}
+    - make install
+    - make distclean
+ - name: compile libopus
+  command: "{{ item }}" 
+  args:
+    chdir: "{{ source_dir }}/opus" 
+    creates: "{{ lib_dir }}/libopus.a"
+  with_items:
+    - ./autogen.sh
+    - ./configure --disable-shared
+    - make {{ cpus }}
+    - make install
+    - make distclean
+- name: compile libvpx
+  command: "{{ item }}" 
+  args:
+    chdir: "{{ source_dir }}/libvpx" 
+    creates: "{{ lib_dir }}/libvpx.a"
+  with_items:
+    - ./configure --disable-shared
+    - make {{ cpus }}
+    - make install
+    - make clean
+
+- name: compile ffmpeg
+  command: "{{ item }}" 
+  args:
+    chdir: "{{ source_dir }}/ffmpeg" 
+    creates: "{{ bin_dir }}/ffmpeg"
+  with_items:
+    - ./configure --bindir={{ bin_dir }} --extra-libs=-ldl --enable-gpl --enable-libass --enable-libfdk-aac --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libx264 --enable-nonfree
+    - make {{ cpus }}
+    - make install
+    - make distclean
