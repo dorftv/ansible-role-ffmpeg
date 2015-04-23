@@ -72,7 +72,7 @@
     - make {{ cpus }}
     - make install
     - make distclean
- - name: compile fdk-aac
+- name: compile fdk-aac
   command: "{{ item }}" 
   args:
     chdir: "{{ source_dir }}/fdk-aac" 
@@ -83,7 +83,7 @@
     - make {{ cpus }}
     - make install
     - make distclean
- - name: compile libopus
+- name: compile libopus
   command: "{{ item }}" 
   args:
     chdir: "{{ source_dir }}/opus" 
