@@ -48,7 +48,12 @@
        dest={{ source_dir }}/opus
        accept_hostkey=yes
 
-
+- name: clone latest librtmp
+  git: repo=git://git.ffmpeg.org/rtmpdump.git
+       dest={{ source_dir }}/librtmp
+       accept_hostkey=yes
+      
+       
 # Compiling
 
 - name: compile yasm 
@@ -62,6 +67,17 @@
     - make {{ cpus }}
     - make install
     - make distclean
+    
+- name: compile librtmp
+  command: "{{ item }}"
+  args:
+    chdir: "{{ source_dir }}/librtmp"
+    creates: "{{ lib_dir }}/librtmp.a"
+  with_items:
+    - make {{ cpus }}
+    - make install
+    - make clean        
+    
 - name: compile x264
   command: "{{ item }}" 
   args:
@@ -72,6 +88,7 @@
     - make {{ cpus }}
     - make install
     - make distclean
+    
 - name: compile fdk-aac
   command: "{{ item }}" 
   args:
@@ -83,6 +100,7 @@
     - make {{ cpus }}
     - make install
     - make distclean
+    
 - name: compile libopus
   command: "{{ item }}" 
   args:
@@ -94,6 +112,7 @@
     - make {{ cpus }}
     - make install
     - make distclean
+    
 - name: compile libvpx
   command: "{{ item }}" 
   args:
@@ -111,7 +130,7 @@
     chdir: "{{ source_dir }}/ffmpeg" 
     creates: "{{ bin_dir }}/ffmpeg"
   with_items:
-    - ./configure --bindir={{ bin_dir }} --extra-libs=-ldl --enable-gpl --enable-libass --enable-libfdk-aac --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libx264 --enable-nonfree
+    - ./configure --bindir={{ bin_dir }} --enable-librtmp --extra-libs=-ldl --enable-gpl --enable-libass --enable-libfdk-aac --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libx264 --enable-nonfree
     - make {{ cpus }}
     - make install
     - make distclean
