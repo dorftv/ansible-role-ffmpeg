@@ -16,7 +16,7 @@
     - texi2html 
     - zlib1g-dev
     - libmp3lame-dev
-    - libopenssl-dev
+    - libssl-dev
 
 # Git
 
