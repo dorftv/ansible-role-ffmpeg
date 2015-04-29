@@ -17,8 +17,15 @@
     - zlib1g-dev
     - libmp3lame-dev
     - libssl-dev
-
+    - mercurial
+    - cmake 
+    - cmake-curses-gui
+    
 # Git
+
+- name: clone latest x265
+  hg: repo=https://bitbucket.org/multicoreware/x265
+      dest={{ source_dir }}/x265
 
 - name: clone latest yasm
   git: repo=git://github.com/yasm/yasm.git 
@@ -68,12 +75,21 @@
     - make {{ cpus }}
     - make install
     - make distclean
-    
+        
+- name: compile libx265        
+  command: "{{ item }}"
+  args:
+    chdir: "{{  source_dir }}/x265/build"
+  with_items:
+   - cmake ../source
+   - make {{ cpus }}
+   - make install
+
 - name: compile librtmp
   command: "{{ item }}"
   args:
     chdir: "{{ source_dir }}/librtmp"
-    creates: "{{ lib_dir }}/librtmp.a"
+#    creates: "{{ lib_dir }}/librtmp.a"
   with_items:
     - make {{ cpus }}
     - make install
@@ -131,7 +147,11 @@
     chdir: "{{ source_dir }}/ffmpeg" 
     creates: "{{ bin_dir }}/ffmpeg"
   with_items:
-    - ./configure --bindir={{ bin_dir }} --enable-librtmp --extra-libs=-ldl --enable-gpl --enable-libass --enable-libfdk-aac --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libx264 --enable-nonfree
+    - ./configure --bindir={{ bin_dir }} --enable-librtmp --extra-libs=-ldl --enable-gpl --enable-libass --enable-libfdk-aac --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libx264 --enable-nonfree --enable-libx265 
     - make {{ cpus }}
     - make install
     - make distclean
+    
+- name: cleanup
+  command: |
+    rm -rf {{ source_dir }}

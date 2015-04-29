@@ -4,3 +4,6 @@ source_dir: "/usr/local/src"
 lib_dir: "/usr/local/lib"
 bin_dir: "/usr/local/bin"
 cpus: "-j5"
+
+features:
+  - libx265
