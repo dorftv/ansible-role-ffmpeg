@@ -1,5 +1,5 @@
-Role Name
-=========
+dorftv.ffmpeg
+=============
 
 Compiles and installs ffmpeg with configurable versions and features like x265, x264, opus, fdk-aac, vpx.
 
