@@ -1,7 +1,7 @@
 dorftv.ffmpeg
 =============
 
-Compiles and installs ffmpeg with configurable versions and features like x265, x264, opus, fdk-aac, vpx.
+Compiles and installs ffmpeg with configurable versions and features like x265, x264, opus, fdk-aac, vpx and decklink capture.
 
 
 Role Variables
@@ -40,6 +40,8 @@ ffmpeg_opus_version: "master"
 ffmpeg_vpx: True
 ffmpeg_vpx_versoin: "master"
 
+ffmpeg_decklink: True
+ffmpeg_decklink_sdk: "/tmp/decklink/include"
 
 ffmpeg_cleanup: True
 
@@ -71,6 +73,7 @@ License
 -------
 
 GPLv2
+exept Black Magic SDK in files/include.
 
 Author Information
 ------------------

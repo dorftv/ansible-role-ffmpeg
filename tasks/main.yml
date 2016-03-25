@@ -20,6 +20,9 @@
   
 - include: vpx.yml
   when: ffmpeg_vpx
+  
+- include: decklink.yml
+  when: ffmpeg_decklink  
 
   
 - include: ffmpeg.yml

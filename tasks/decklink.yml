@@ -1,0 +1,6 @@
+---
+- name: Make sure SDK target dir is there.
+  file: path={{ ffmpeg_decklink_sdk }} state=directory
+  
+- name: Copy Black Magic SDK files
+  copy: src=files/include/ dest={{ ffmpeg_decklink_sdk }}
