@@ -60,7 +60,7 @@ Example playbook to compile and install ffmpeg locally.
 - hosts: localhost
   become: yes
   roles:
-     - { role: dorftv.ffmpeg, x: 42 }
+     - { role: dorftv.ffmpeg, ffmpeg_opus: False, ffmpeg_bin_dir: "/usr/bin" }
 ```         
 Dependencies
 ------------
