@@ -5,7 +5,9 @@ galaxy_info:
   company: your company (optional)
   license: GPLv2
   min_ansible_version: 1.7
-
+  galaxy_tags:
+    - ffmpeg
+    - multimedia
   platforms:
     - name: Ubuntu
       versions:
