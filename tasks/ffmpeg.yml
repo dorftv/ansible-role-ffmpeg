@@ -1,0 +1,18 @@
+---
+- name: clone latest ffmpeg
+  git: repo=git://source.ffmpeg.org/ffmpeg.git
+       dest={{ ffmpeg_source_dir }}/ffmpeg
+       accept_hostkey=yes
+       version={{ ffmpeg_version }}
+
+- debug: msg="./configure --bindir={{ ffmpeg_bin_dir }} {{ ffmpeg_features }} {{ ffmpeg_compile_options }} {{ ffmpeg_compile_options_custom }}"       
+- name: compile ffmpeg
+  command: "{{ item }}"
+  args:
+    chdir: "{{ ffmpeg_source_dir }}/ffmpeg"
+  #  creates: "{{ ffmpeg_bin_dir }}/ffmpeg"
+  with_items:
+    - "./configure --bindir={{ ffmpeg_bin_dir }} {{ ffmpeg_features }} {{ ffmpeg_compile_options }} {{ ffmpeg_compile_options_custom }}"
+    - make {{ ffmpeg_cpu_flag }}
+    - make install
+    - make distclean

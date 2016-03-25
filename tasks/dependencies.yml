@@ -1,0 +1,43 @@
+---
+# install dependencies
+
+- apt: update_cache=yes cache_valid_time=3600
+
+- name: install dependencies
+  action: apt pkg={{ item }} state=present
+  with_items:
+    - git-core
+    - autoconf 
+    - automake 
+    - build-essential 
+    - libass-dev 
+    - libgpac-dev
+    - libtheora-dev 
+    - libtool 
+    - libvorbis-dev 
+    - pkg-config 
+    - texi2html 
+    - zlib1g-dev
+    - libmp3lame-dev
+    - libssl-dev
+    - mercurial
+    - cmake 
+    - cmake-curses-gui
+    
+- name: clone latest yasm
+  git: repo=git://github.com/yasm/yasm.git 
+       dest={{ ffmpeg_source_dir }}/yasm 
+       accept_hostkey=yes
+       
+
+- name: compile yasm 
+  command: "{{ item }}"
+  args:
+    chdir: "{{ ffmpeg_source_dir }}/yasm" 
+    creates: "{{ ffmpeg_bin_dir }}/yasm"
+  with_items:
+    - ./autogen.sh
+    - ./configure --bindir={{ ffmpeg_bin_dir }}
+    - make {{ ffmpeg_cpu_flag }}
+    - make install
+    - make distclean           

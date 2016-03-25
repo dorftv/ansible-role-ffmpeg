@@ -1,157 +1,29 @@
-- apt: update_cache=yes cache_valid_time=3600
+---
 
-- name: install dependencies
-  action: apt pkg={{ item }} state=present
-  with_items:
-    - git-core
-    - autoconf 
-    - automake 
-    - build-essential 
-    - libass-dev 
-    - libgpac-dev
-    - libtheora-dev 
-    - libtool 
-    - libvorbis-dev 
-    - pkg-config 
-    - texi2html 
-    - zlib1g-dev
-    - libmp3lame-dev
-    - libssl-dev
-    - mercurial
-    - cmake 
-    - cmake-curses-gui
+- debug: var=ffmpeg_features
+- include: dependencies.yml
+
+- include: x265.yml
+  when: ffmpeg_x265
+  
+- include: rtmp.yml
+  when: ffmpeg_rtmp
+  
+- include: fdk-aac.yml
+  when: ffmpeg_fdkaac
+  
+- include: x264.yml
+  when: ffmpeg_x264
+  
+- include: opus.yml
+  when: ffmpeg_opus
+  
+- include: vpx.yml
+  when: ffmpeg_vpx
+
+  
+- include: ffmpeg.yml
+
     
-# Git
-
-- name: clone latest x265
-  hg: repo=https://bitbucket.org/multicoreware/x265
-      dest={{ source_dir }}/x265
-
-- name: clone latest yasm
-  git: repo=git://github.com/yasm/yasm.git 
-       dest={{ source_dir }}/yasm 
-       accept_hostkey=yes
-- name: clone latest fdk-aac
-  git: repo=git://github.com/mstorsjo/fdk-aac.git
-       dest={{ source_dir }}/fdk-aac
-       accept_hostkey=yes
-
-- name: clone latest x264
-  git: repo=git://git.videolan.org/x264.git
-       dest={{ source_dir }}/x264
-       accept_hostkey=yes
-       
-- name: clone latest libvpx
-  git: repo=https://chromium.googlesource.com/webm/libvpx.git
-         dest={{ source_dir }}/libvpx
-         accept_hostkey=yes
-
-- name: clone latest ffmpeg
-  git: repo=git://source.ffmpeg.org/ffmpeg.git
-       dest={{ source_dir }}/ffmpeg
-       accept_hostkey=yes
-
-- name: clone latest opus
-  git: repo=git://git.opus-codec.org/opus.git
-       dest={{ source_dir }}/opus
-       accept_hostkey=yes
-
-- name: clone latest librtmp
-  git: repo=git://git.ffmpeg.org/rtmpdump.git
-       dest={{ source_dir }}/librtmp
-       accept_hostkey=yes
-      
-       
-# Compiling
-
-- name: compile yasm 
-  command: "{{ item }}"
-  args:
-    chdir: "{{ source_dir }}/yasm" 
-    creates: "{{ bin_dir }}/yasm"
-  with_items:
-    - ./autogen.sh
-    - ./configure --bindir={{ bin_dir }}
-    - make {{ cpus }}
-    - make install
-    - make distclean
-        
-- name: compile libx265        
-  command: "{{ item }}"
-  args:
-    chdir: "{{  source_dir }}/x265/build"
-  with_items:
-   - cmake ../source
-   - make {{ cpus }}
-   - make install
-
-- name: compile librtmp
-  command: "{{ item }}"
-  args:
-    chdir: "{{ source_dir }}/librtmp"
-#    creates: "{{ lib_dir }}/librtmp.a"
-  with_items:
-    - make {{ cpus }}
-    - make install
-    - make clean        
-    
-- name: compile x264
-  command: "{{ item }}" 
-  args:
-    chdir: "{{ source_dir }}/x264" 
-    creates: "{{ bin_dir }}/x264"
-  with_items:
-    - ./configure --bindir={{ bin_dir }} --enable-static
-    - make {{ cpus }}
-    - make install
-    - make distclean
-    
-- name: compile fdk-aac
-  command: "{{ item }}" 
-  args:
-    chdir: "{{ source_dir }}/fdk-aac" 
-    creates: "{{ lib_dir }}/libfdk-aac.a"
-  with_items:
-    - autoreconf -fiv
-    - ./configure --disable-shared
-    - make {{ cpus }}
-    - make install
-    - make distclean
-    
-- name: compile libopus
-  command: "{{ item }}" 
-  args:
-    chdir: "{{ source_dir }}/opus" 
-    creates: "{{ lib_dir }}/libopus.a"
-  with_items:
-    - ./autogen.sh
-    - ./configure --disable-shared
-    - make {{ cpus }}
-    - make install
-    - make distclean
-    
-- name: compile libvpx
-  command: "{{ item }}" 
-  args:
-    chdir: "{{ source_dir }}/libvpx" 
-    creates: "{{ lib_dir }}/libvpx.a"
-  with_items:
-    - ./configure --disable-shared
-    - make {{ cpus }}
-    - make install
-    - make clean
-
-- name: compile ffmpeg
-  command: "{{ item }}" 
-  args:
-    chdir: "{{ source_dir }}/ffmpeg" 
-    creates: "{{ bin_dir }}/ffmpeg"
-  with_items:
-    - ./configure --bindir={{ bin_dir }} --enable-librtmp --extra-libs=-ldl --enable-gpl --enable-libass --enable-libfdk-aac --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libx264 --enable-nonfree --enable-libx265 
-    - make {{ cpus }}
-    - make install
-    - make distclean
-    
-- name: cleanup
-  command: |
-    rm -rf {{ source_dir }}
+- include: cleanup.yml
+  when: ffmpeg_cleanup
