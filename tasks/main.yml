@@ -1,4 +1,6 @@
 ---
+- include: decklink.yml
+  when: ffmpeg_decklink  
 
 - debug: var=ffmpeg_features
 - include: dependencies.yml
@@ -21,8 +23,7 @@
 - include: vpx.yml
   when: ffmpeg_vpx
   
-- include: decklink.yml
-  when: ffmpeg_decklink  
+
 
   
 - include: ffmpeg.yml
