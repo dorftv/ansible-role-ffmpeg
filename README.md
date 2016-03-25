@@ -1,38 +1,80 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Compiles and installs ffmpeg with configurable versions and features like x265, x264, opus, fdk-aac, vpx.
 
-Requirements
-------------
-
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yml
+---
+ffmpeg_source_dir: "/usr/local/src"
+ffmpeg_lib_dir: "/usr/local/lib"
+ffmpeg_bin_dir: "/usr/local/bin"
 
-Dependencies
-------------
+# add custom compile options to ffmpeg
+ffmpeg_version: "master"
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+# allows add additional flags to ffmpeg eg --enable-v4l2
+ffmpeg_compile_options_custom:  
+
+
+# enable features and configure options
+
+ffmpeg_x265: True
+ffmpeg_x265_revision: "default"
+
+ffmpeg_rtmp: True
+ffmpeg_rtmp_version: "master"
+
+ffmpeg_x264: True
+ffmpeg_x264_version: "master"
+
+ffmpeg_fdkaac: True
+ffmpeg_fdkaac_version: "master"
+
+ffmpeg_opus: True
+ffmpeg_opus_version: "master"
+
+ffmpeg_vpx: True
+ffmpeg_vpx_versoin: "master"
+
+
+ffmpeg_cleanup: True
+
+
+# some default ffmpeg configure options
+ffmpeg_compile_options: --enable-nonfree --enable-gpl  --extra-libs=-ldl --enable-libass --enable-libmp3lame --enable-libtheora --enable-libvorbis 
+
+```
+
+
 
 Example Playbook
 ----------------
+Example playbook to compile and install ffmpeg locally.
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+```yml
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+- hosts: localhost
+  become: yes
+  roles:
+     - { role: dorftv.ffmpeg, x: 42 }
+```         
+Dependencies
+------------
+
+A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.         
 
 License
 -------
 
-BSD
+GPLv2
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+This playbook is used to create the [dorftv/ffmpeg-core](https://hub.docker.com/r/dorftv/ffmpeg-core/) docker image.
+
+
