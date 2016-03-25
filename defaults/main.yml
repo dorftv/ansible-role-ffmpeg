@@ -29,7 +29,7 @@ ffmpeg_opus: True
 ffmpeg_opus_version: "master"
 
 ffmpeg_vpx: True
-ffmpeg_vpx_versoin: "master"
+ffmpeg_vpx_version: "master"
 
 ffmpeg_decklink: True
 ffmpeg_decklink_sdk: "/tmp/decklink/include"
