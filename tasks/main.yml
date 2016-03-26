@@ -22,8 +22,6 @@
   
 - include: vpx.yml
   when: ffmpeg_vpx
-  
-
 
   
 - include: ffmpeg.yml
