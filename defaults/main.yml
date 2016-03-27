@@ -1,8 +1,9 @@
 ---
 # defaults file for dorftv.ffmpeg
-ffmpeg_source_dir: "/usr/local/src"
-ffmpeg_lib_dir: "/usr/local/lib"
-ffmpeg_bin_dir: "/usr/local/bin"
+ffmpeg_prefix: "/usr/local"
+ffmpeg_source_dir: "{{ ffmpeg_prefix }}/src"
+ffmpeg_lib_dir: "{{ ffmpeg_prefix }}/lib"
+ffmpeg_bin_dir: "{{ ffmpeg_prefix }}/bin"
 
 # add custom compile options to ffmpeg
 ffmpeg_version: "master"

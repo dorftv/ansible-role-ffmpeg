@@ -4,6 +4,7 @@
 
 - debug: var=ffmpeg_features
 - include: dependencies.yml
+  tags: dependency
 
 - include: x265.yml
   when: ffmpeg_x265

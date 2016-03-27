@@ -12,4 +12,4 @@
   with_items:
     - make {{ ffmpeg_cpu_flag }}
     - make install
-    - make clean               
+    - make clean
