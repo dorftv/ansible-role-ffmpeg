@@ -38,7 +38,7 @@ ffmpeg_cleanup: True
 
 
 # some default ffmpeg configure options
-ffmpeg_compile_options: --enable-nonfree --enable-gpl  --extra-libs=-ldl --enable-libass --enable-libmp3lame --enable-libtheora --enable-libvorbis 
+ffmpeg_compile_options: --enable-nonfree --enable-gpl  --extra-libs=-ldl --enable-libass --enable-libmp3lame --enable-libtheora --enable-libvorbis --enable-openssl
 
 # calculation of enabled features
 ffmpeg_x265_flag: "{% if ffmpeg_x265 %}--enable-libx265 {% endif %}"

@@ -23,6 +23,7 @@
     - mercurial
     - cmake 
     - cmake-curses-gui
+    - libssl-dev
     
 - name: clone latest yasm
   git: repo=git://github.com/yasm/yasm.git 
