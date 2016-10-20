@@ -50,7 +50,7 @@ ffmpeg_fdkaac_flag: "{% if ffmpeg_fdkaac %}--enable-libfdk-aac {% endif %}"
 ffmpeg_decklink_flag: "{% if ffmpeg_decklink %}--enable-decklink --extra-cflags=-I{{ ffmpeg_decklink_sdk }} --extra-ldflags=-L{{ ffmpeg_decklink_sdk }}{% endif %}"
 
 
-ffmpeg_features: "{{ ffmpeg_x265_flag }} {{ ffmpeg_rtmp_flag }} {{ ffmpeg_x264_flag }} {{ ffmpeg_opus_flag }} {{ ffmpeg_vpx_flag }} {{ ffmpeg_fdkaac_flag }}"
+ffmpeg_features: "{{ ffmpeg_x265_flag }} {{ ffmpeg_rtmp_flag }} {{ ffmpeg_x264_flag }} {{ ffmpeg_opus_flag }} {{ ffmpeg_vpx_flag }} {{ ffmpeg_fdkaac_flag }} {{ ffmpeg_decklink_flag }}"
 
 
 
